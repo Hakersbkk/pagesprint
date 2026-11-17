@@ -5,11 +5,12 @@
   "payment_link": "",
   "contact_email": "easonjadaklmica@gmail.com",
   "whatsapp": "",
-  "payment_note": "Pay by bank transfer (virement) or Cash Plus after you approve your free preview \u2014 details on request.",
+  "payment_note": "Paiement par virement bancaire (Bank of Africa - BMCE) ou Cash Plus apr\u00e8s votre aper\u00e7u gratuit \u2014 coordonn\u00e9es envoy\u00e9es sur demande.",
   "models": [
     "deepseek-v4.1-flash-free",
     "glm-5.3-flash-free",
     "big-pickle",
     "kilo-auto/free"
-  ]
+  ],
+  "bank_details": ""
 }
