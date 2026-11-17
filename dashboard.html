@@ -84,6 +84,7 @@ label{display:flex;flex-direction:column;font-size:12px;color:#667380;gap:3px;fl
       <label>Contact email<input name="contact_email" type="email"></label>
       <label>WhatsApp number<input name="whatsapp"></label>
       <label>Payment note (shown under the order button)<input name="payment_note"></label>
+      <label>Bank details (shown in payment box, e.g. RIB)<input name="bank_details"></label>
       <label style="flex-basis:100%">Packages (JSON — name, price, features)<textarea name="services" rows="4" style="width:100%;font-family:monospace"></textarea></label>
       <button style="align-self:flex-end">Save &amp; rebuild storefront</button>
     </form>
@@ -135,7 +136,7 @@ function render() {
     : `<div class="empty">No leads yet. Add local businesses that have no website.</div>`;
 
   const f = $("fc");
-  if (!f.dataset.filled) { for (const k of ["brand","price","currency","payment_link","contact_email","whatsapp","payment_note"]) f[k].value = c[k]; f["services"].value = JSON.stringify(c.services, null, 1); f.dataset.filled = 1; }
+  if (!f.dataset.filled) { for (const k of ["brand","price","currency","payment_link","contact_email","whatsapp","payment_note","bank_details"]) f[k].value = c[k]; f["services"].value = JSON.stringify(c.services, null, 1); f.dataset.filled = 1; }
 }
 const upd = (table, id, set) => call("/api/update", {table, id, set});
 const del = (table, id) => confirm("Delete this entry?") && call("/api/delete", {table, id});
