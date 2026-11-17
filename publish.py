@@ -37,6 +37,9 @@ def collect():
             print("skip", rel)
             continue
         files[rel] = p.read_text(errors="replace")
+    store = ROOT / "public" / "index.html"
+    if store.exists():  # the storefront becomes the GitHub Pages homepage
+        files["index.html"] = store.read_text(errors="replace")
     return files
 
 
