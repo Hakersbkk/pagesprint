@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{BRAND}} — a website for your business in 24 hours</title>
+<meta name="description" content="A clean one-page website for your local business, delivered in 24 hours for a flat {{PRICE}}. Free preview before you pay.">
+<style>
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#16202b;line-height:1.6;background:#fbfaf7}
+.wrap{max-width:920px;margin:0 auto;padding:0 22px}
+header{padding:22px 0;font-weight:800;font-size:1.2rem;letter-spacing:-.02em}
+header span{color:#e2552b}
+.hero{padding:56px 0 64px}
+h1{font-size:clamp(2.1rem,6vw,3.6rem);line-height:1.08;letter-spacing:-.035em;max-width:14ch}
+h1 em{font-style:normal;color:#e2552b}
+.hero p{font-size:1.15rem;max-width:52ch;margin:20px 0 30px;color:#45525f}
+.btn{display:inline-block;background:#16202b;color:#fff;text-decoration:none;font-weight:700;padding:15px 26px;border-radius:10px}
+.btn.off{background:#9aa4ae}
+.sub{display:block;margin-top:12px;font-size:.92rem;color:#667380}
+section{padding:48px 0;border-top:1px solid #e6e2d9}
+h2{font-size:1.5rem;letter-spacing:-.02em;margin-bottom:22px}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:#fff;border:1px solid #e6e2d9;border-radius:14px;padding:22px}
+.card b{display:block;margin-bottom:6px}
+.card p{color:#55626f;font-size:.97rem}
+.num{color:#e2552b;font-weight:800;font-size:.85rem;letter-spacing:.08em}
+.price{font-size:3rem;font-weight:800;letter-spacing:-.04em}
+ul{padding-left:20px;color:#45525f;margin:14px 0 26px}
+.tiers{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin:18px 0}
+.tier{background:#fff;border:1px solid #e6e2d9;border-radius:14px;padding:24px;display:flex;flex-direction:column}
+.tier h3{font-size:1.05rem;letter-spacing:-.01em}
+.tier .p{font-size:2.1rem;font-weight:800;letter-spacing:-.04em;margin:8px 0 12px;color:#e2552b}
+.tier .btn{text-align:center;margin-top:auto}
+.tier ul{flex:1}
+footer{padding:34px 0 50px;color:#667380;font-size:.92rem;border-top:1px solid #e6e2d9}
+footer a{color:#16202b}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>{{BRAND}}<span>.</span></header>
+
+<div class="hero">
+  <h1>Your business online in <em>24 hours</em>.</h1>
+  <p>A clean, fast, one-page website for your shop, salon, café or trade — written and built for you. Flat {{PRICE}}. You see a free preview before you pay anything.</p>
+  {{CTA}}
+  <span class="sub">No subscription. No hidden fees. You own the files.</span>
+</div>
+
+<section>
+  <h2>How it works</h2>
+  <div class="grid">
+    <div class="card"><span class="num">STEP 1</span><b>Tell us about your business</b><p>Name, what you do, opening hours, phone and address. Five minutes by message or email.</p></div>
+    <div class="card"><span class="num">STEP 2</span><b>Get a free preview</b><p>Within 24 hours you receive a link to your finished page. Ask for changes if you want them.</p></div>
+    <div class="card"><span class="num">STEP 3</span><b>Pay only if you like it</b><p>Happy? Pay the flat fee and we hand over the site, ready to go live.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>What you get</h2>
+  <div class="grid">
+    <div class="card"><b>Works on every phone</b><p>Built mobile-first, so customers searching on the go can read it and call you.</p></div>
+    <div class="card"><b>Everything customers ask</b><p>What you offer, opening hours, where you are and how to reach you — on one page.</p></div>
+    <div class="card"><b>Yours to keep</b><p>You receive the site files. Host them anywhere; we can help you put them online.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Pick your package</h2>
+  <div class="tiers">{{TIERS}}</div>
+  {{PAYNOTE}}
+</section>
+
+<footer>{{BRAND}} · {{CONTACT}}</footer>
+</div>
+</body>
+</html>
