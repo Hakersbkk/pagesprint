@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageSprint — control dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#f4f3ef;color:#16202b;font-size:14px;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:22px}
+h1{font-size:1.35rem;letter-spacing:-.02em}
+h1 span{color:#e2552b}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.top a{color:#16202b;font-weight:600;margin-left:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid #e2dfd6;border-radius:12px;padding:14px 16px}
+.stat small{color:#667380;display:block}
+.stat b{font-size:1.7rem;letter-spacing:-.03em}
+.stat.money b{color:#1d7a46}
+.panel{background:#fff;border:1px solid #e2dfd6;border-radius:12px;padding:16px;margin-bottom:18px;overflow-x:auto}
+h2{font-size:1rem;margin-bottom:12px}
+form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+input,select,textarea{font:inherit;padding:7px 9px;border:1px solid #cfcbc0;border-radius:8px;background:#fff;min-width:0}
+form input{flex:1 1 130px}
+button{font:inherit;font-weight:600;padding:7px 12px;border:0;border-radius:8px;background:#16202b;color:#fff;cursor:pointer}
+button.alt{background:#ebe8df;color:#16202b}
+button.go{background:#e2552b}
+button:disabled{opacity:.5;cursor:wait}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;color:#667380;font-weight:600;font-size:12px;padding:6px 8px;border-bottom:1px solid #e2dfd6}
+td{padding:8px;border-bottom:1px solid #efece4;vertical-align:top}
+td.act{white-space:nowrap}
+td.act button{margin:0 4px 4px 0;padding:5px 9px;font-size:12px}
+.pitch{white-space:pre-wrap;background:#faf8f2;border:1px solid #e9e5da;border-radius:8px;padding:8px;margin-top:6px;max-width:520px}
+.empty{color:#8a949e;padding:10px 0}
+.warn{background:#fff4e5;border:1px solid #f3d19c;border-radius:10px;padding:10px 14px;margin-bottom:18px}
+#err{color:#b3261e;font-weight:600;min-height:1.2em;margin-bottom:8px}
+label{display:flex;flex-direction:column;font-size:12px;color:#667380;gap:3px;flex:1 1 170px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1 id="brand">PageSprint<span>.</span> control</h1>
+    <div><a href="/store" target="_blank">View storefront ↗</a></div>
+  </div>
+  <div id="err"></div>
+  <div id="warn"></div>
+  <div class="stats" id="stats"></div>
+
+  <div class="panel">
+    <h2>Orders</h2>
+    <form id="fo">
+      <input name="business" placeholder="Business name" required>
+      <input name="kind" placeholder="Type (e.g. barber)">
+      <input name="city" placeholder="City">
+      <input name="contact" placeholder="Phone / email / address">
+      <input name="details" placeholder="Services, hours, anything the owner said">
+      <select name="template"><option value="">AI designs it</option>${S ? S.templates.map(t => `<option value="${t}">Template: ${t}</option>`).join("") : ""}</select>
+      <button>Add order</button>
+    </form>
+    <div id="orders"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Leads &amp; outreach</h2>
+    <form id="fl">
+      <input name="business" placeholder="Business name" required>
+      <input name="kind" placeholder="Type (e.g. bakery)">
+      <input name="city" placeholder="City">
+      <input name="contact" placeholder="How to reach them">
+      <button>Add lead</button>
+    </form>
+    <div id="leads"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Business settings</h2>
+    <form id="fc">
+      <label>Brand<input name="brand"></label>
+      <label>Price<input name="price" type="number" min="0" step="1"></label>
+      <label>Currency symbol<input name="currency"></label>
+      <label>Payment link (Stripe / PayPal / Gumroad…)<input name="payment_link" placeholder="https://"></label>
+      <label>Contact email<input name="contact_email" type="email"></label>
+      <label>WhatsApp number<input name="whatsapp"></label>
+      <label>Payment note (shown under the order button)<input name="payment_note"></label>
+      <label style="flex-basis:100%">Packages (JSON — name, price, features)<textarea name="services" rows="4" style="width:100%;font-family:monospace"></textarea></label>
+      <button style="align-self:flex-end">Save &amp; rebuild storefront</button>
+    </form>
+  </div>
+</div>
+<script>
+let S = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+async function call(path, body, btn) {
+  $("err").textContent = "";
+  if (btn) btn.disabled = true;
+  try {
+    const r = await fetch(path, body ? {method: "POST", body: JSON.stringify(body)} : undefined);
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    S = d; render();
+  } catch (e) { $("err").textContent = "Error: " + e.message; }
+  if (btn) btn.disabled = false;
+}
+
+function render() {
+  const c = S.config, s = S.stats, cur = c.currency;
+  $("brand").innerHTML = esc(c.brand) + "<span>.</span> control";
+  const missing = [];
+  if (!c.payment_link) missing.push("a payment link");
+  if (!c.contact_email && !c.whatsapp) missing.push("a contact email or WhatsApp number");
+  $("warn").innerHTML = missing.length ? `<div class="warn">Not ready to take money yet: add ${missing.join(" and ")} in Business settings below.</div>` : "";
+  $("stats").innerHTML = [
+    ["Revenue (paid)", cur + s.revenue, "money"], ["Costs", cur + s.costs, ""],
+    ["Profit", cur + (s.revenue - s.costs), "money"], ["Paid orders", s.paid_orders, ""],
+    ["Awaiting payment", s.unpaid, ""], ["Leads contacted", s.contacted + " / " + s.leads, ""],
+  ].map(([l, v, k]) => `<div class="stat ${k}"><small>${l}</small><b>${esc(v)}</b></div>`).join("");
+
+  $("orders").innerHTML = S.orders.length ? `<table><tr><th>#</th><th>Business</th><th>Details</th><th>Price</th><th>Status</th><th>Site</th><th></th></tr>` +
+    S.orders.map(o => `<tr><td>${o.id}</td><td><b>${esc(o.business)}</b><br>${esc(o.kind)} · ${esc(o.city)}<br>${esc(o.contact)}</td>
+      <td>${esc(o.details)}</td><td>${cur}${o.price}</td>
+      <td><select onchange="upd('orders',${o.id},{status:this.value})">${["unpaid","paid","delivered","cancelled"].map(x => `<option ${x===o.status?"selected":""}>${x}</option>`).join("")}</select></td>
+      <td>${o.site ? `<a href="${esc(o.site)}" target="_blank">Preview ↗</a>` : "—"}</td>
+      <td class="act"><select onchange="upd('orders',${o.id},{template:this.value})" title="Theme used on next build"><option value="">AI designs it</option>${S.templates.map(t => `<option value="${t}" ${t===o.template?"selected":""}>${t}</option>`).join("")}</select><button class="go" onclick="call('/api/build',{id:${o.id}},this)">${o.site ? "Rebuild" : "Build site"}</button><button class="alt" onclick="del('orders',${o.id})">Delete</button></td></tr>`).join("") + "</table>"
+    : `<div class="empty">No orders yet. Convert a lead or add one above.</div>`;
+
+  $("leads").innerHTML = S.leads.length ? `<table><tr><th>#</th><th>Business</th><th>Status</th><th>Pitch</th><th></th></tr>` +
+    S.leads.map(l => `<tr><td>${l.id}</td><td><b>${esc(l.business)}</b><br>${esc(l.kind)} · ${esc(l.city)}<br>${esc(l.contact)}</td>
+      <td><select onchange="upd('leads',${l.id},{status:this.value})">${["new","contacted","replied","converted","declined"].map(x => `<option ${x===l.status?"selected":""}>${x}</option>`).join("")}</select></td>
+      <td>${l.pitch ? `<div class="pitch">${esc(l.pitch)}</div>` : "—"}</td>
+      <td class="act"><button onclick="call('/api/pitch',{id:${l.id}},this)">${l.pitch ? "Rewrite" : "Write pitch"}</button>${l.pitch ? `<button class="alt" onclick="copy(${l.id})">Copy</button>` : ""}<button class="go" onclick="call('/api/convert',{id:${l.id}},this)">→ Order</button><button class="alt" onclick="del('leads',${l.id})">Delete</button></td></tr>`).join("") + "</table>"
+    : `<div class="empty">No leads yet. Add local businesses that have no website.</div>`;
+
+  const f = $("fc");
+  if (!f.dataset.filled) { for (const k of ["brand","price","currency","payment_link","contact_email","whatsapp","payment_note"]) f[k].value = c[k]; f["services"].value = JSON.stringify(c.services, null, 1); f.dataset.filled = 1; }
+}
+const upd = (table, id, set) => call("/api/update", {table, id, set});
+const del = (table, id) => confirm("Delete this entry?") && call("/api/delete", {table, id});
+const copy = id => navigator.clipboard.writeText(S.leads.find(l => l.id === id).pitch);
+function hook(id, path, reset) {
+  $(id).addEventListener("submit", async e => {
+    e.preventDefault();
+    await call(path, Object.fromEntries(new FormData(e.target)), e.target.querySelector("button"));
+    if (reset && !$("err").textContent) e.target.reset();
+  });
+}
+hook("fo", "/api/order", true); hook("fl", "/api/lead", true); hook("fc", "/api/config", false);
+call("/api/state");
+</script>
+</body>
+</html>
