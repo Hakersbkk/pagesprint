@@ -9,8 +9,9 @@
   "models": [
     "deepseek-v4.1-flash-free",
     "glm-5.3-flash-free",
-    "big-pickle",
-    "kilo-auto/free"
+    "longcat-2.5-free",
+    "mimo-v2.6-flash-free",
+    "nemotron-3.5-lightning-free"
   ],
   "bank_details": "Bank of Africa (BMCE)<br>RIB : 011 330 0000012000068871 76"
 }
