@@ -1,0 +1,15 @@
+{
+  "brand": "PageSprint",
+  "price": 490,
+  "currency": "MAD ",
+  "payment_link": "",
+  "contact_email": "easonjadaklmica@gmail.com",
+  "whatsapp": "",
+  "payment_note": "Pay by bank transfer (virement) or Cash Plus after you approve your free preview \u2014 details on request.",
+  "models": [
+    "deepseek-v4.1-flash-free",
+    "glm-5.3-flash-free",
+    "big-pickle",
+    "kilo-auto/free"
+  ]
+}
