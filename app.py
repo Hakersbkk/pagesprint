@@ -25,6 +25,7 @@ DEFAULT_CONFIG = {
     "contact_email": "easonjadaklmica@gmail.com",
     "whatsapp": "",
     "payment_note": "Pay by bank transfer (virement) or Cash Plus after you approve your free preview — details on request.",
+    "bank_details": "",
     "services": [
         {"name": "Starter One-Page Site", "price": 490,
          "features": ["One clean mobile-friendly page", "Your services, hours and contact",
@@ -165,6 +166,8 @@ def render_store():
         cta = '<span class="btn off">Ordering opens soon</span>'
     contact = ""
     paynote = f'<span class="sub">{e(c["payment_note"])}</span>' if c.get("payment_note") else ""
+    if c.get("bank_details"):
+        paynote += (f'<div class="bankbox"><b>Paiement / Payment:</b><br>{e(c["bank_details"])}</div>')
     if c["contact_email"]:
         contact += f'<a href="mailto:{e(c["contact_email"])}">{e(c["contact_email"])}</a> '
     if c["whatsapp"]:
@@ -231,7 +234,7 @@ def api(path, d):
             con.execute("update orders set site=? where id=?", (make_site(o), d["id"]))
         elif path == "/api/config":
             c = cfg()
-            for k in ("brand", "price", "currency", "payment_link", "contact_email", "whatsapp", "payment_note"):
+            for k in ("brand", "price", "currency", "payment_link", "contact_email", "whatsapp", "payment_note", "bank_details"):
                 if k in d:
                     c[k] = float(d[k]) if k == "price" else d[k]
             if "services" in d:
