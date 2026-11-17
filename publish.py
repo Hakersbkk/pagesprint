@@ -21,7 +21,7 @@ def call(method, path, body=None, token=None, ok=(200, 201, 204)):
         **({"Content-Type": "application/json"} if body is not None else {})})
     data = json.dumps(body).encode() if body is not None else None
     try:
-        with urllib.request.urlopen(req, data) as r:
+        with urllib.request.urlopen(req, data, timeout=30) as r:
             return r.status, json.load(r) if r.status != 204 else {}
     except urllib.error.HTTPError as e:
         return e.code, json.loads(e.read() or b"{}")
