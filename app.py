@@ -74,20 +74,27 @@ def init():
     render_store()
 
 
-def llm(prompt, max_tokens=6000):
+AGENT_MARKERS = ("/home/", "shell tool", "working directory", "paste the relevant",
+                 "what would you like me to do", "i'll start by", "explore the repository",
+                 "tools are described", "debug or fix")
+
+
+def llm(prompt, max_tokens=6000, reject=()):
+    messages = prompt if isinstance(prompt, list) else [{"role": "user", "content": prompt}]
     key = json.loads(LLM_KEY_FILE.read_text())["forwardKey"]
     last = "no model tried"
     for model in cfg()["models"]:
         body = json.dumps({"model": model, "max_tokens": max_tokens,
-                           "messages": [{"role": "user", "content": prompt}]}).encode()
+                           "messages": messages}).encode()
         req = urllib.request.Request(LLM_BASE + "/chat/completions", data=body, headers={
             "Authorization": "Bearer " + key, "Content-Type": "application/json"})
         try:
             with urllib.request.urlopen(req, timeout=180) as r:
                 text = json.load(r)["choices"][0]["message"].get("content") or ""
-            if text.strip():
+            low = text.strip().lower()
+            if text.strip() and not any(m in low for m in reject):
                 return text.strip()
-            last = f"{model}: empty reply"
+            last = f"{model}: {'agent-style reply rejected' if text.strip() else 'empty reply'}"
         except Exception as e:  # try the next free model
             last = f"{model}: {e}"
     raise RuntimeError("all models failed (" + last + ")")
@@ -200,11 +207,29 @@ def state():
         "costs": 0}}
 
 
+RESTAURANT_BOT_SYSTEM = (
+    "You are 'Amal', the AI assistant for Pizza Amal, a wood-fired pizzeria in Marrakech "
+    "that delivers. Facts you may use: open daily 11:00-00:00; menu: pizza margherita 40 MAD, "
+    "pizza vegetarienne 50 MAD, pizza frutti di mare 70 MAD, burger 45 MAD, sandwich 30 MAD; "
+    "delivery free in Marrakech center, 10 MAD outside; phone [PHONE]. "
+    "Reply in the same language/dialect the customer writes in (darija, Arabic, French or "
+    "English), friendly and concise (max 60 words). You may take simple orders and confirm "
+    "them. If asked something you do not know, say you will check with the team — never "
+    "invent facts.")
+
+
 LEAD_F = ("business", "kind", "city", "contact", "status", "pitch", "notes")
 ORDER_F = ("business", "kind", "city", "contact", "details", "price", "status", "site", "template")
 
 
 def api(path, d):
+    if path == "/api/chat":
+        msgs = d.get("messages") or []
+        if not msgs:
+            raise ValueError("no messages")
+        reply = llm([{"role": "system", "content": RESTAURANT_BOT_SYSTEM}] + msgs, 300,
+                    reject=AGENT_MARKERS)
+        return {"reply": reply}
     with db() as con:
         if path == "/api/lead":
             con.execute("insert into leads(business,kind,city,contact) values(?,?,?,?)",
@@ -276,6 +301,8 @@ class H(BaseHTTPRequestHandler):
             return self.send(200, state())
         if p == "/store":
             return self.send(200, (PUBLIC / "index.html").read_bytes(), "text/html")
+        if p == "/chatbot":
+            return self.send(200, (ROOT / "chatbot.html").read_bytes(), "text/html")
         m = re.fullmatch(r"/sites/(\d+)/([\w./-]+)", p)
         if m and (SITES / m.group(1)).exists():
             f = (SITES / m.group(1) / m.group(2)).resolve()
