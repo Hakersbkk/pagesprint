@@ -5,7 +5,7 @@
   "payment_link": "",
   "contact_email": "easonjadaklmica@gmail.com",
   "whatsapp": "",
-  "payment_note": "Paiement par virement bancaire (Bank of Africa - BMCE), Cash Plus, ou crypto (BTC, ETH, SOL, XRP) après votre aperçu gratuit — coordonnées envoyées sur demande.",
+  "payment_note": "Aperçu gratuit avant de payer. 🇲🇦 Marocains : virement national (RIB BMCE) ou Cash Plus. 🌍 International : IBAN ou crypto (BTC, ETH, SOL, XRP). Coordonnées complètes envoyées sur demande.",
   "models": [
     "deepseek-v4.1-flash-free",
     "glm-5.3-flash-free",
@@ -13,5 +13,107 @@
     "mimo-v2.6-flash-free",
     "nemotron-3.5-lightning-free"
   ],
-  "bank_details": "Banque : Bank of Africa (BMCE)<br>RIB : 011 330 0000012000068871 76<br><br><b>Crypto also accepted:</b><br>₿ BTC : bc1qhw976uydhveqw3lyzm7fkca37fv369zk5ykezy<br>Ξ ETH : 0xBc46043c48cf299615C00D8C081a317dbfAC07F5<br>◎ SOL : 6A5Bo2ooqi8bxx7M9XDdb4XG6oPygsHtaYifRB53JgzA<br>✕ XRP : rnbWWFi2g7SgibR6SJBoyFrwDcvorazEAX"
+  "bank_details": "<b>Paiement Maroc (national)</b><br>Banque : Bank of Africa (BMCE)<br>RIB : 011 330 0000012000068871 76<br><br><b>International / outside Morocco</b><br>IBAN : MA64 0113 3000 0001 2000 0688 7176<br><br><b>Crypto (anywhere):</b><br>₿ BTC : bc1qhw976uydhveqw3lyzm7fkca37fv369zk5ykezy<br>Ξ ETH : 0xBc46043c48cf299615C00D8C081a317dbfAC07F5<br>◎ SOL : 6A5Bo2ooqi8bxx7M9XDdb4XG6oPygsHtaYifRB53JgzA<br>✕ XRP : rnbWWFi2g7SgibR6SJBoyFrwDcvorazEAX",
+  "services": [
+    {
+      "name": "Starter One-Page Site",
+      "price": 490,
+      "features": [
+        "One clean mobile-friendly page",
+        "Your services, hours and contact",
+        "Free preview before you pay",
+        "Delivered within 24 hours"
+      ]
+    },
+    {
+      "name": "Business Site",
+      "price": 990,
+      "features": [
+        "Everything in Starter",
+        "Contact form + WhatsApp button",
+        "Photo gallery and Google Maps location",
+        "One round of changes included"
+      ]
+    },
+    {
+      "name": "Full Launch Pack",
+      "price": 1490,
+      "features": [
+        "Everything in Business",
+        "We put it online for you (hosting included)",
+        "Help getting found on Google",
+        "Priority 12-hour delivery"
+      ]
+    },
+    {
+      "name": "AI Chat Assistant (Amal)",
+      "price": 1490,
+      "features": [
+        "AI bot on WhatsApp / your site (like the demo on this site)",
+        "Answers FAQs, quotes prices, takes orders — 24/7",
+        "Speaks darija, Arabic, French, English, Spanish",
+        "Trained on YOUR business info, delivered in 48h"
+      ]
+    },
+    {
+      "name": "Google Presence Pack",
+      "price": 590,
+      "features": [
+        "Google Business Profile setup & optimization",
+        "Photos, hours, services listed properly",
+        "Review request strategy that works",
+        "Listed on Maps so clients find you"
+      ]
+    },
+    {
+      "name": "Menu & Catalog Digital",
+      "price": 690,
+      "features": [
+        "Your menu / price list as a clean mobile page",
+        "QR code for tables, flyers and packaging",
+        "Easy to update — no developer needed",
+        "Perfect for restaurants, cafés, salons"
+      ]
+    },
+    {
+      "name": "Site + AI Bot Bundle",
+      "price": 2490,
+      "features": [
+        "Business site + AI chat assistant together",
+        "Your site answers visitors AND takes orders on WhatsApp",
+        "Best value — the machine works for you 24/7",
+        "2 weeks of adjustments included"
+      ]
+    },
+    {
+      "name": "Small Changes & Fixes",
+      "price": 200,
+      "features": [
+        "Fix or update an existing site (yours or one we built)",
+        "Text, photos, prices, hours — anything",
+        "Same-day for simple changes",
+        "Cheapest way to keep your site fresh"
+      ]
+    },
+    {
+      "name": "Online Booking System",
+      "price": 1190,
+      "features": [
+        "Clients book appointments on your site",
+        "Sends confirmations automatically",
+        "Calendar synced — no double bookings",
+        "Perfect for salons, clinics, coaches"
+      ]
+    },
+    {
+      "name": "Restaurant WhatsApp Orders",
+      "price": 1790,
+      "features": [
+        "Clients order from a clean digital menu",
+        "Order arrives on your WhatsApp instantly",
+        "Daily sales summary for you",
+        "Live demo on our site right now"
+      ]
+    }
+  ]
 }
