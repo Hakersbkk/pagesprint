@@ -227,7 +227,8 @@ def api(path, d):
         msgs = d.get("messages") or []
         if not msgs:
             raise ValueError("no messages")
-        reply = llm([{"role": "system", "content": RESTAURANT_BOT_SYSTEM}] + msgs, 300,
+        system = d.get("persona") or RESTAURANT_BOT_SYSTEM
+        reply = llm([{"role": "system", "content": system}] + msgs, 400,
                     reject=AGENT_MARKERS)
         return {"reply": reply}
     with db() as con:
